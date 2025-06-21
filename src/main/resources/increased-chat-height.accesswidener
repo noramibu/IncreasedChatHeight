@@ -1,0 +1,9 @@
+accessWidener v2 named
+
+accessible class net/minecraft/client/option/SimpleOption$Callbacks
+accessible class net/minecraft/client/option/SimpleOption$SliderCallbacks
+
+accessible method net/minecraft/client/option/SimpleOption$SliderCallbacks toSliderProgress (Ljava/lang/Object;)D
+accessible method net/minecraft/client/option/SimpleOption$SliderCallbacks toValue (D)Ljava/lang/Object;
+accessible method net/minecraft/client/option/SimpleOption$Callbacks codec ()Lcom/mojang/serialization/Codec;
+accessible method net/minecraft/client/option/SimpleOption$Callbacks validate (Ljava/lang/Object;)Ljava/util/Optional; 

@@ -9,6 +9,7 @@ import java.util.Optional;
 public class ChatHeightSliderCallbacks implements SimpleOption.SliderCallbacks<Double> {
     public static final ChatHeightSliderCallbacks FOCUSED = new ChatHeightSliderCallbacks(4.0);
     public static final ChatHeightSliderCallbacks UNFOCUSED = new ChatHeightSliderCallbacks(4.0);
+    public static final ChatHeightSliderCallbacks SCALE = new ChatHeightSliderCallbacks(5.0);
 
     private final double max;
 

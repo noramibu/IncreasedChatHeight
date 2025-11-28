@@ -1,8 +1,10 @@
 package me.noramibu.increasedchatheight.mixin.client;
 
 import me.noramibu.increasedchatheight.ChatHeightSliderCallbacks;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
+import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,14 +18,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class GameOptionsMixin {
 
     @Shadow @Final @Mutable
-    private SimpleOption<Double> field_1838; // focusedChatHeight
+    private SimpleOption<Double> chatHeightFocused;
 
     @Shadow @Final @Mutable
-    private SimpleOption<Double> field_1825; // unfocusedChatHeight
+    private SimpleOption<Double> chatHeightUnfocused;
+
+    @Shadow @Final @Mutable
+    private SimpleOption<Double> chatScale;
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;load()V"))
     private void modifyChatOptions(CallbackInfo ci) {
-        this.field_1838 = new SimpleOption<Double>(
+        this.chatHeightFocused = new SimpleOption<Double>(
                 "options.chat.height.focused",
                 SimpleOption.emptyTooltip(),
                 (Text optionText, Double value) -> Text.translatable("options.pixel_value", optionText, (int)Math.round(value * 180.0)),
@@ -33,7 +38,7 @@ public abstract class GameOptionsMixin {
                 (Double value) -> {}
         );
 
-        this.field_1825 = new SimpleOption<Double>(
+        this.chatHeightUnfocused = new SimpleOption<Double>(
                 "options.chat.height.unfocused",
                 SimpleOption.emptyTooltip(),
                 (Text optionText, Double value) -> {
@@ -46,6 +51,16 @@ public abstract class GameOptionsMixin {
                 ChatHeightSliderCallbacks.UNFOCUSED.codec(),
                 0.5,
                 (Double value) -> {}
+        );
+
+        this.chatScale = new SimpleOption<Double>(
+                "options.chat.scale",
+                SimpleOption.emptyTooltip(),
+                (optionText, value) -> (Text)(value == 0.0 ? ScreenTexts.composeToggleText(optionText, false) : Text.translatable("options.percent_value", optionText, (int)(value * 100.0))),
+                ChatHeightSliderCallbacks.SCALE,
+                ChatHeightSliderCallbacks.SCALE.codec(),
+                1.0,
+                (Double value) -> MinecraftClient.getInstance().inGameHud.getChatHud().reset()
         );
     }
 } 

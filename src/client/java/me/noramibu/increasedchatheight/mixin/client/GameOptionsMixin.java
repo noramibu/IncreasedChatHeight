@@ -1,11 +1,11 @@
 package me.noramibu.increasedchatheight.mixin.client;
 
 import me.noramibu.increasedchatheight.ChatHeightSliderCallbacks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.option.SimpleOption;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.Options;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -14,38 +14,38 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GameOptions.class)
+@Mixin(Options.class)
 public abstract class GameOptionsMixin {
 
     @Shadow @Final @Mutable
-    private SimpleOption<Double> chatHeightFocused;
+    private OptionInstance<Double> chatHeightFocused;
 
     @Shadow @Final @Mutable
-    private SimpleOption<Double> chatHeightUnfocused;
+    private OptionInstance<Double> chatHeightUnfocused;
 
     @Shadow @Final @Mutable
-    private SimpleOption<Double> chatScale;
+    private OptionInstance<Double> chatScale;
 
-    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;load()V"))
+    @Inject(method = "<init>(Lnet/minecraft/client/Minecraft;Ljava/io/File;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Options;load()V"))
     private void modifyChatOptions(CallbackInfo ci) {
-        this.chatHeightFocused = new SimpleOption<Double>(
+        this.chatHeightFocused = new OptionInstance<Double>(
                 "options.chat.height.focused",
-                SimpleOption.emptyTooltip(),
-                (Text optionText, Double value) -> Text.translatable("options.pixel_value", optionText, (int)Math.round(value * 180.0)),
+                OptionInstance.noTooltip(),
+                (Component optionText, Double value) -> Component.translatable("options.pixel_value", optionText, (int)Math.round(value * 180.0)),
                 ChatHeightSliderCallbacks.FOCUSED,
                 ChatHeightSliderCallbacks.FOCUSED.codec(),
                 1.0,
                 (Double value) -> {}
         );
 
-        this.chatHeightUnfocused = new SimpleOption<Double>(
+        this.chatHeightUnfocused = new OptionInstance<Double>(
                 "options.chat.height.unfocused",
-                SimpleOption.emptyTooltip(),
-                (Text optionText, Double value) -> {
+                OptionInstance.noTooltip(),
+                (Component optionText, Double value) -> {
                     if (value == 0.0) {
-                        return Text.translatable("options.generic_value", optionText, Text.translatable("options.off"));
+                        return Component.translatable("options.generic_value", optionText, CommonComponents.OPTION_OFF);
                     }
-                    return Text.translatable("options.pixel_value", optionText, (int)Math.round(value * 180.0));
+                    return Component.translatable("options.pixel_value", optionText, (int)Math.round(value * 180.0));
                 },
                 ChatHeightSliderCallbacks.UNFOCUSED,
                 ChatHeightSliderCallbacks.UNFOCUSED.codec(),
@@ -53,14 +53,14 @@ public abstract class GameOptionsMixin {
                 (Double value) -> {}
         );
 
-        this.chatScale = new SimpleOption<Double>(
+        this.chatScale = new OptionInstance<Double>(
                 "options.chat.scale",
-                SimpleOption.emptyTooltip(),
-                (optionText, value) -> (Text)(value == 0.0 ? ScreenTexts.composeToggleText(optionText, false) : Text.translatable("options.percent_value", optionText, (int)(value * 100.0))),
+                OptionInstance.noTooltip(),
+                (optionText, value) -> (Component)(value == 0.0 ? CommonComponents.optionStatus(optionText, false) : Component.translatable("options.percent_value", optionText, (int)(value * 100.0))),
                 ChatHeightSliderCallbacks.SCALE,
                 ChatHeightSliderCallbacks.SCALE.codec(),
                 1.0,
-                (Double value) -> MinecraftClient.getInstance().inGameHud.getChatHud().reset()
+                (Double value) -> Minecraft.getInstance().gui.getChat().rescaleChat()
         );
     }
-} 
+}

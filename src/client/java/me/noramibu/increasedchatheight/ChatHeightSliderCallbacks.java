@@ -1,12 +1,12 @@
 package me.noramibu.increasedchatheight;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.client.option.SimpleOption;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.util.Mth;
 
 import java.util.Optional;
 
-public class ChatHeightSliderCallbacks implements SimpleOption.SliderCallbacks<Double> {
+public class ChatHeightSliderCallbacks implements OptionInstance.SliderableValueSet<Double> {
     public static final ChatHeightSliderCallbacks FOCUSED = new ChatHeightSliderCallbacks(4.0);
     public static final ChatHeightSliderCallbacks UNFOCUSED = new ChatHeightSliderCallbacks(4.0);
     public static final ChatHeightSliderCallbacks SCALE = new ChatHeightSliderCallbacks(5.0);
@@ -18,17 +18,17 @@ public class ChatHeightSliderCallbacks implements SimpleOption.SliderCallbacks<D
     }
 
     @Override
-    public Optional<Double> validate(Double value) {
+    public Optional<Double> validateValue(Double value) {
         return value >= 0.0 && value <= this.max ? Optional.of(value) : Optional.empty();
     }
 
     @Override
-    public double toSliderProgress(Double value) {
-        return MathHelper.clamp(value / this.max, 0.0, 1.0);
+    public double toSliderValue(Double value) {
+        return Mth.clamp(value / this.max, 0.0, 1.0);
     }
 
     @Override
-    public Double toValue(double progress) {
+    public Double fromSliderValue(double progress) {
         return progress * this.max;
     }
 

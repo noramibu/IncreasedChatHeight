@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "${mod_group_id}",
+    "id": "${mod_id}",
+    "version": "${version}",
+    "metadata": {
+      "name": "${mod_name}",
+      "description": "${mod_description}",
+      "license": "${mod_license}",
+      "contributors": {
+        "${mod_authors}": "Developer"
+      },
+      "contact": {
+        "sources": "${mod_sources_url}"
+      },
+      "icon": "assets/${mod_id}/icon.png"
+    },
+    "access_widener": "increased-chat-height.accesswidener",
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "versions": ">=${quilt_loader}"
+      },
+      {
+        "id": "minecraft",
+        "versions": "~${minecraft_minor_version}"
+      },
+      {
+        "id": "java",
+        "versions": ">=25"
+      }
+    ]
+  },
+  "mixin": [
+    "increased-chat-height.common.mixins.json"
+  ]
+}

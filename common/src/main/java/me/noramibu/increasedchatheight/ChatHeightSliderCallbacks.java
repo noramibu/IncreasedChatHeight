@@ -6,7 +6,7 @@ import net.minecraft.util.Mth;
 
 import java.util.Optional;
 
-public class ChatHeightSliderCallbacks implements OptionInstance.SliderableValueSet<Double> {
+public final class ChatHeightSliderCallbacks implements OptionInstance.SliderableValueSet<Double> {
     public static final ChatHeightSliderCallbacks FOCUSED = new ChatHeightSliderCallbacks(4.0);
     public static final ChatHeightSliderCallbacks UNFOCUSED = new ChatHeightSliderCallbacks(4.0);
     public static final ChatHeightSliderCallbacks SCALE = new ChatHeightSliderCallbacks(5.0);
@@ -36,4 +36,4 @@ public class ChatHeightSliderCallbacks implements OptionInstance.SliderableValue
     public Codec<Double> codec() {
         return Codec.doubleRange(0.0, this.max);
     }
-} 
+}

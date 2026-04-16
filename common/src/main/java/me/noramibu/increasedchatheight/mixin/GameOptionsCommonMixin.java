@@ -1,6 +1,5 @@
 package me.noramibu.increasedchatheight.mixin;
 
-import me.noramibu.increasedchatheight.ChatHeightSliderCallbacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
@@ -38,7 +37,7 @@ public abstract class GameOptionsCommonMixin {
                 "options.chat.height.focused",
                 OptionInstance.noTooltip(),
                 (optionText, value) -> Component.translatable("options.pixel_value", optionText, (int) Math.round(value * 180.0)),
-                ChatHeightSliderCallbacks.FOCUSED,
+                OptionInstance.UnitDouble.INSTANCE.xmap(value -> value * 4.0, value -> value / 4.0),
                 1.0,
                 value -> {
                 }
@@ -50,7 +49,7 @@ public abstract class GameOptionsCommonMixin {
                 (optionText, value) -> value == 0.0
                         ? Component.translatable("options.generic_value", optionText, CommonComponents.OPTION_OFF)
                         : Component.translatable("options.pixel_value", optionText, (int) Math.round(value * 180.0)),
-                ChatHeightSliderCallbacks.UNFOCUSED,
+                OptionInstance.UnitDouble.INSTANCE.xmap(value -> value * 4.0, value -> value / 4.0),
                 0.5,
                 value -> {
                 }
@@ -62,7 +61,7 @@ public abstract class GameOptionsCommonMixin {
                 (optionText, value) -> value == 0.0
                         ? CommonComponents.optionStatus(optionText, false)
                         : Component.translatable("options.percent_value", optionText, (int) (value * 100.0)),
-                ChatHeightSliderCallbacks.SCALE,
+                OptionInstance.UnitDouble.INSTANCE.xmap(value -> value * 5.0, value -> value / 5.0),
                 1.0,
                 value -> Minecraft.getInstance().gui.getChat().rescaleChat()
         );

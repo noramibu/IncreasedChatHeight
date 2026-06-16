@@ -63,7 +63,7 @@ public abstract class GameOptionsCommonMixin {
                         : Component.translatable("options.percent_value", optionText, (int) (value * 100.0)),
                 OptionInstance.UnitDouble.INSTANCE.xmap(value -> value * 5.0, value -> value / 5.0),
                 1.0,
-                value -> Minecraft.getInstance().gui.getChat().rescaleChat()
+                value -> Minecraft.getInstance().gui.hud.getChat().rescaleChat()
         );
     }
 }

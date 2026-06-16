@@ -24,6 +24,6 @@ side="CLIENT"
 [[dependencies.${neoforge_mod_id}]]
 modId="minecraft"
 type="required"
-versionRange="[${minecraft_minor_version},26.2)"
+versionRange="[${minecraft_minor_version},26.3)"
 ordering="NONE"
 side="CLIENT"
